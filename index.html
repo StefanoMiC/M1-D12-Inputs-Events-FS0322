@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <title>Accessing Elements in the DOM</title>
+
+
+    <style>
+        html {
+            font-family: sans-serif;
+            color: #333;
+        }
+
+        body {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        div div,
+        div article {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #dedede;
+        }
+
+        .selected {
+            color: orange;
+            border-radius: 6px;
+            border-width: 2px;
+            border-color: orange;
+            border-style: solid;
+            padding: 4px;
+        }
+
+        .color-blue {
+            color: blue;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1 onclick="toggleAllHeaderClasses()">Accessing Elements in the DOM</h1>
+    <input type="button" value="Set header class" onclick="setHeaderClass()" />
+    <button onclick="toggleAllHeaderClasses()">color all H2s</button>
+    <button onclick="createNewElement()">Create new Element</button>
+    <button onclick="hideContent()">Hide content</button>
+    <div id="creation-area">
+        <!-- newly generated items will be visible here -->
+    </div>
+
+    <div id="container-node">
+
+        <h2 id="demo-id" class="previous-class">ID (#demo-id)</h2>
+        <div>Access me by ID</div>
+    </div>
+
+
+    <div id="second-container">
+        <h2>Class (.demo-class)</h2>
+        <div class="demo-class">Access me by class (1)</div>
+        <div class="demo-class">Access me by class (2)</div>
+    </div>
+
+
+    <div>
+        <h2>Tag (article)</h2>
+        <div id="article-container">
+            <article>Access me by tag (1)</article>
+            <article>Access me by tag (2)</article>
+        </div>
+    </div>
+
+
+    <div id="demo-query">
+        <h2>Query Selector</h2>
+        <div>Access me by query</div>
+    </div>
+
+
+    <div>
+        <h2>Query Selector All</h2>
+        <div class="demo-query-all">Access me by query all (1)</div>
+        <div class="demo-query-all">Access me by query all (2)</div>
+    </div>
+
+
+    <h2>A more complex query</h2>
+    <div id="more-complex">
+        <ul>
+            <li>First element inside a list</li>
+            <li>Second element inside a list</li>
+            <li>Third element inside a list</li>
+        </ul>
+    </div>
+
+    <script>
+        const setHeaderClass = function () {
+            // FIRST: find the "demo-id" node in the page
+            const demoIdNode = document.getElementById("demo-id")
+            // SECOND: adding the class "selected", if clicked again the toggle will remove it
+            demoIdNode.classList.toggle("selected")
+            // logging the output
+            console.log("setHeaderClass happened!")
+            console.dir(demoIdNode)
+        }
+
+        const toggleAllHeaderClasses = function () {
+            // FIRST: find all the H2 elements in the page
+            const headerNodes = document.getElementsByTagName("h2")
+
+            // The alternative way with the for...of, just SYNTACTIC SUGAR on the normal for loop
+            // for (let node of headerNodes) {
+
+            //     console.log("for...of", node)
+            //     // node.classList.add("selected")
+            // }
+
+            for (let i = 0; i < headerNodes.length; i++) {
+                const node = headerNodes[i]
+
+                console.log("for loop", node)
+                node.classList.toggle("selected")
+                // node.innerText = "CHANGED"
+                node.innerHTML = "<i><span class='color-blue'>CHANGED</span></i>"
+            }
+        }
+
+        const createNewElement = function () {
+
+            // const parentNode = document.getElementById("creation-area")
+            const containerNode = document.getElementById("container-node")
+            const nodeToGoBeforeOf = document.getElementById("demo-id")
+            const newElementNode = document.createElement("div")
+
+            newElementNode.innerText = "Hey I'm a new Node!!!"
+            newElementNode.className = "selected"
+            console.log(newElementNode)
+            // parentNode.appendChild(newElementNode)
+
+            // const body = document.getElementsByTagName("body")[0]
+            // const body = document.querySelector("body")
+            // body.appendChild(newElementNode)
+
+            containerNode.insertBefore(newElementNode, nodeToGoBeforeOf)
+
+
+        }
+
+        let nodeToPreserve = null
+
+        const hideContent = function () {
+            const containerNode = document.getElementById("container-node")
+            // containerNode.hidden = !containerNode.hidden
+            // containerNode.setAtttribute("hidden", !containerNode.hidden)
+            // containerNode.style.display = "none"
+            // containerNode.style = "display:none;"
+            if (nodeToPreserve === null) {
+                nodeToPreserve = containerNode
+                containerNode.remove()
+            } else {
+                const body = document.querySelector("body") // body is the same parent of both containers
+                const nodeToInsertBeforeOf = document.getElementById("second-container")
+                body.insertBefore(nodeToPreserve, nodeToInsertBeforeOf) // inserting it back in the same previous spot
+                nodeToPreserve = null // resets the value since we pushed the item in the DOM, 
+                //so that next time we fall in the initial condition of the if
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
