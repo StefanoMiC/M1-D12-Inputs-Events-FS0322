@@ -61,6 +61,9 @@
     <label for="username">Username</label>
     <input type="text" id="username" onkeyup="handleKeyUp(event)" placeholder="type some text here" />
     <button onclick="handleInputValue()">Add text</button>
+
+    <input type="color" id="color-input" />
+
     <div id="creation-area">
         <!-- newly generated items will be visible here -->
     </div>
@@ -107,7 +110,7 @@
 
     <h2>A more complex query</h2>
     <div id="more-complex">
-        <ul>
+        <ul style="padding: 2rem">
             <li>First element inside a list</li>
             <li>Second element inside a list</li>
             <li>Third element inside a list</li>
@@ -119,6 +122,28 @@
             // anything that needs to run at the moment of the page load (AFTER IT) it should be put inside of a window.onload method!!!
             const firstTitle = document.getElementById("demo-id")
             firstTitle.style.color = "red"
+
+            const moreComplexDiv = document.getElementById("more-complex")
+            moreComplexDiv.onclick = function (e) {
+                console.log("NAVIGATING UPWARDS", e.target.parentNode) // this goes up a level from whatever point you start from
+                console.log("NAVIGATING UPWARDS (safely)", e.target.closest("#more-complex")) // this goes up a level from whatever point you start from
+
+                console.log("NAVIGATING INWARDS", e.currentTarget.querySelector("li"))
+
+                console.log("EVENT", e)
+                console.log("CURRENT TARGET", e.currentTtarget)
+                console.log("TARGET", e.target)
+
+                e.currentTarget.style.backgroundColor = "red" // this colors the actual element where the event got fired from
+                e.target.style.backgroundColor = "red" // this colors the actual child that received the click
+            }
+
+            const colorInput = document.getElementById("color-input")
+            colorInput.onchange = function (e) {
+                document.getElementsByTagName("body")[0].style.backgroundColor = e.target.value
+            }
+
+
         }
         // const eventListener = function () {
         //     let event = {}
@@ -143,7 +168,7 @@
 
 
         const changeText = function (e, color) {
-            console.log(e)
+            // console.log(e)
             const article = e.target
 
             article.style.color = color
@@ -244,11 +269,12 @@
                 div.innerText += " :) "
             }
 
-            // newElementNode.onmouseover = changeColor // equivalent to the below method
-            newElementNode.onmouseover = function (e) {
-                console.log("HEY");
-                changeColor(e)
-            }
+            // newElementNode.onmouseover = changeColor //  changeColor(event) equivalent to the below method
+            // newElementNode.onmouseover = function (e) {
+            //     console.log("HEY");
+            //     changeColor(e)
+            // }
+
             // newElementNode.addEventListener("mouseover", changeColor)
             // newElementNode.addEventListener("mouseover", function () { console.log("HEY") })
 
