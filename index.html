@@ -40,16 +40,27 @@
         .color-blue {
             color: blue;
         }
+
+        label {
+            margin-top: 1rem;
+            display: block;
+        }
     </style>
 </head>
 
 
 <body>
-    <h1 onclick="toggleAllHeaderClasses()">Accessing Elements in the DOM</h1>
+
+
+    <h1>Accessing Elements in the DOM</h1>
     <input type="button" value="Set header class" onclick="setHeaderClass()" />
     <button onclick="toggleAllHeaderClasses()">color all H2s</button>
-    <button onclick="createNewElement()">Create new Element</button>
+    <button onclick="createNewElement(event)">Create new Element</button>
     <button onclick="hideContent()">Hide content</button>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" onkeyup="handleKeyUp(event)" placeholder="type some text here" />
+    <button onclick="handleInputValue()">Add text</button>
     <div id="creation-area">
         <!-- newly generated items will be visible here -->
     </div>
@@ -71,8 +82,12 @@
     <div>
         <h2>Tag (article)</h2>
         <div id="article-container">
-            <article>Access me by tag (1)</article>
-            <article>Access me by tag (2)</article>
+            <article onmouseover="changeText(event, 'red')" onmouseleave="changeText(event, 'black')">Access me by tag
+                (1)
+            </article>
+            <article onmouseover="changeText(event, 'red')" onmouseleave="changeText(event, 'black')">Access me by tag
+                (2)
+            </article>
         </div>
     </div>
 
@@ -100,6 +115,82 @@
     </div>
 
     <script>
+        window.onload = function () {
+            // anything that needs to run at the moment of the page load (AFTER IT) it should be put inside of a window.onload method!!!
+            const firstTitle = document.getElementById("demo-id")
+            firstTitle.style.color = "red"
+        }
+        // const eventListener = function () {
+        //     let event = {}
+        //      ...
+        //     createNewElement(event)
+        // }
+
+        // const changeTextRed = (e) => {
+        //     console.log(e)
+        //     const article = e.target
+
+        //     article.style.color = "red"
+        // }
+
+        // const changeTextBlack = (e) => {
+        //     console.log(e)
+        //     const article = e.target
+
+        //     article.style.color = "black"
+        // }
+
+
+
+        const changeText = function (e, color) {
+            console.log(e)
+            const article = e.target
+
+            article.style.color = color
+        }
+
+        const handleKeyUp = function (e) {
+            console.log(e.key)
+            console.log(e.target)
+
+            const keyPressed = e.key
+            const inputNode = e.target
+
+            const h1 = document.getElementsByTagName("h1")[0]
+            // if (keyPressed === "Enter") {
+            h1.innerText = inputNode.value
+            // }
+
+            switch (keyPressed) {
+                case "Shift":
+                    h1.style.color = "red"
+                    break;
+                case "Backspace":
+                    h1.style.color = "blue"
+                    break;
+                case "Alt":
+                    h1.style.color = "purple"
+                    break;
+                case "Enter":
+                    h1.style.color = "green"
+                    break;
+
+                default:
+
+                    break;
+            }
+
+        }
+
+        const handleInputValue = function () {
+            const inputNode = document.getElementById("username")
+            let text = inputNode.value
+
+            const h1 = document.getElementsByTagName("h1")[0]
+            h1.innerText = text
+
+        }
+
         const setHeaderClass = function () {
             // FIRST: find the "demo-id" node in the page
             const demoIdNode = document.getElementById("demo-id")
@@ -131,16 +222,39 @@
             }
         }
 
-        const createNewElement = function () {
+        const createNewElement = function (event) {
+            console.log("EVENT", event)
+            const inputNode = document.getElementById("username")
+            let userName = inputNode.value
 
             // const parentNode = document.getElementById("creation-area")
             const containerNode = document.getElementById("container-node")
             const nodeToGoBeforeOf = document.getElementById("demo-id")
             const newElementNode = document.createElement("div")
 
-            newElementNode.innerText = "Hey I'm a new Node!!!"
+            newElementNode.innerText = "Hey " + userName + "!" + " " + event.offsetX + " " + event.offsetY
             newElementNode.className = "selected"
+
+
+            const changeColor = function (e) {
+                console.log(e)
+                const div = e.target
+
+                div.style.color = "green"
+                div.innerText += " :) "
+            }
+
+            // newElementNode.onmouseover = changeColor // equivalent to the below method
+            newElementNode.onmouseover = function (e) {
+                console.log("HEY");
+                changeColor(e)
+            }
+            // newElementNode.addEventListener("mouseover", changeColor)
+            // newElementNode.addEventListener("mouseover", function () { console.log("HEY") })
+
             console.log(newElementNode)
+
+            inputNode.value = ""
             // parentNode.appendChild(newElementNode)
 
             // const body = document.getElementsByTagName("body")[0]
@@ -148,6 +262,7 @@
             // body.appendChild(newElementNode)
 
             containerNode.insertBefore(newElementNode, nodeToGoBeforeOf)
+
 
 
         }
@@ -170,7 +285,6 @@
                 nodeToPreserve = null // resets the value since we pushed the item in the DOM, 
                 //so that next time we fall in the initial condition of the if
             }
-
         }
 
     </script>
