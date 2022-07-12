@@ -143,6 +143,11 @@
                 document.getElementsByTagName("body")[0].style.backgroundColor = e.target.value
             }
 
+            // Everything that should be executed as soon as the page is loaded and ready
+            // should belong to this function
+
+            // For instance, setting the header class...
+            setHeaderClass()
 
         }
         // const eventListener = function () {
@@ -166,7 +171,9 @@
         // }
 
 
-
+        // This function is a LISTENER for an EVENT
+        // That means that WHENEVER the EVENT is HAPPENING
+        // this FUNCTION is CALLED
         const changeText = function (e, color) {
             // console.log(e)
             const article = e.target
@@ -269,12 +276,23 @@
                 div.innerText += " :) "
             }
 
-            // newElementNode.onmouseover = changeColor //  changeColor(event) equivalent to the below method
+            // WE WANT TO SET 'changeColor' AS A LISTENER FOR THE MOUSE OVER EVENT
+            // WARNING: we're NOT calling the function RIGHT NOW,
+            // so we don't have to put any brackets () or (event)
+            // This down here is equivalent to writing:
+            // ...onmouseover="changeTextColor(event)"
+            // in the static HTML code
+
+            newElementNode.onmouseover = changeColor //  changeColor(event), the event will be passed automatically by the eventListener itself
             // newElementNode.onmouseover = function (e) {
             //     console.log("HEY");
             //     changeColor(e)
             // }
 
+
+            // it is equivalent to the below method
+            // This second alternative is more powerful, because it allows us
+            // to specify MORE THAN ONE listener to the event
             // newElementNode.addEventListener("mouseover", changeColor)
             // newElementNode.addEventListener("mouseover", function () { console.log("HEY") })
 
@@ -286,6 +304,9 @@
             // const body = document.getElementsByTagName("body")[0]
             // const body = document.querySelector("body")
             // body.appendChild(newElementNode)
+
+            // WE NOW ATTACH / APPEND THE NEWLY CREATED ELEMENT TO THE DOM
+            // From now on, it will show up in the page
 
             containerNode.insertBefore(newElementNode, nodeToGoBeforeOf)
 
